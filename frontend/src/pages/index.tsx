@@ -10,7 +10,7 @@ export default function Index() {
         fetch("http://localhost:3030/product/all").then(res=>res.json()).then(data=>{
             console.log(data);
             
-            setData(data)
+            setData(data.msg)
         })
     }, []);
 

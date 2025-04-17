@@ -11,7 +11,7 @@ export default function Product() {
     useEffect(()=>{
         fetch(`http://localhost:3030/product/${params.id}`).then(res=>res.json()).then(data=>{
             console.log(data);
-            setData(data[0])
+            setData(data.msg)
             
         })
     }, [])

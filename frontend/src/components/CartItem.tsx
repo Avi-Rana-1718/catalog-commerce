@@ -6,8 +6,8 @@ export default function CartItem({id, quantity, setTotal, setQuantity}:{id:strin
 
     useEffect(()=>{        
         fetch(`http://localhost:3030/product/${id}`).then(res=>res.json()).then(data=>{
-            setData(data[0])
-            setTotal((e)=>e+(data[0]?.price-(data[0]?.price*(data[0]?.discount/100)))*quantity);  
+            setData(data.msg)
+            setTotal((e)=>e+(data.msg?.price-(data.msg?.price*(data.msg?.discount/100)))*quantity);  
             setQuantity((e)=>e+quantity)          
         })
     }, [])

@@ -5,7 +5,7 @@ export default function ItemPreview({id, quantity}:{id:Number, quantity:Number})
 
    useEffect(()=>{
         fetch(`http://localhost:3030/product/${id}`).then(res=>res.json()).then(data=>{
-            setData(data[0])         
+            setData(data.msg)         
         })
    }, [])
    
