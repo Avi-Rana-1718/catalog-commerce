@@ -5,7 +5,7 @@ import { DatabaseService } from "src/database/database.service";
 export class UserService{
     constructor(private pool:DatabaseService){}
 
-    async getUser() {
-
+    async getUser(userObj) {
+        return {type: "SUCCESS", msg: userObj}
     }
 }

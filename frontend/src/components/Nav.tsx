@@ -14,7 +14,6 @@ export default function Nav() {
             headers: {
                 Authorization: `Bearer ${token}`
             },
-            cache: "force-cache"
         }).then(res=>res.json()).then(data=>{
             if(data?.type=="SUCCESS") {
                 setUsername(data?.msg?.username)

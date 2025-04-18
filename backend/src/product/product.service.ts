@@ -16,7 +16,7 @@ export class ProductService {
         }
     }
 
-    async getById(id) {
+    async getById(id:string) {
         const result = await this.pool.query('SELECT name, productid, price, discount, images, description FROM "product" WHERE productid = $1', [id]);
 
         if(result.type=="SUCCESS") {
