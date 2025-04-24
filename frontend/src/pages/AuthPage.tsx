@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export default function Auth() {
+export default function AuthPage() {
 
     const [signUp, setSignUp] = useState(true);
     const [username, setUsername] = useState("");

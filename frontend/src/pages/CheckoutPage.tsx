@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Nav from "../components/Nav";
 
-import { FaPlus } from "react-icons/fa";
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
+import ItemPreview from "../components/ItemPreview";
 
-export default function Checkout() {
+export default function CheckoutPage() {
 
+    let navigate = useNavigate();
+    
     const [shipping, setShipping] = useState(JSON.parse(localStorage.getItem("shipping")));
     const [addAddress, setAddAddress] = useState(false)
+
+    const [data] = useState(JSON.parse(localStorage.getItem("cart")))
 
     const [name, setName] = useState("");
     const [newAddress, setNewAddress] = useState("")
@@ -16,8 +20,10 @@ export default function Checkout() {
     const [selectedAddress, setSelectedAddress] = useState({})
 
     function createOrder() {
-        console.log(localStorage.getItem("cart"));
-        
+        let cartData = JSON.parse(localStorage.getItem("cart"));
+        cartData.forEach(el=>{
+            delete el.maxStock;
+        });
         fetch("http://localhost:3030/order/create", {
             method: "POST",
             headers: {
@@ -25,7 +31,7 @@ export default function Checkout() {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             },
             body: JSON.stringify({
-                items: localStorage.getItem("cart"),
+                items: JSON.stringify(cartData),
                 address: selectedAddress
             })
         }).then(res=>res.json()).then(data=>{
@@ -33,21 +39,26 @@ export default function Checkout() {
 
             if(data?.type=="SUCCESS") {
                 localStorage.removeItem("cart");
+                navigate("/orders")
             }
             
         })
     }
 
+    console.log(data);
+    
     return (
         <>
         <Nav />
         <div className="p-4">
-            <h3 className="text-2xl">Checkout</h3>
 
-            <div className="mt-4">
-                <h2 className="font-semibold text-xl">Delivering to</h2>
-                <small>Select a exisiting address or add a new one!</small>
-                <form className="divide-y-2 divide-[#F3F3F3] border-y-2 border-[#f3f3f3]">
+            <div className="mt-4 flex-1">
+                <h3 className="text-6xl font-['Oswald'] mb-8">CHECKOUT</h3>
+
+                <h2 className="text-2xl font-['Oswald'] my-4">MY INFORMATION</h2>
+                <h2 className="text-xl">Delivering to</h2>
+                <small className="text-[#666]">Select a exisiting address or add a new one!</small>
+                <form className="divide-y-2 divide-[#F3F3F3] border-y-2 mt-4 border-[#f3f3f3]">
                     {
                         shipping && shipping.map(((el, i)=>{
                             return (
@@ -76,7 +87,7 @@ export default function Checkout() {
                                             setShipping(data)
             
                                         }}
-                                        className="mt-2 block text-blue-500 hover:underline cursor-pointer"
+                                        className="mt-2 block hover:text-[#666] underline cursor-pointer"
                                     >
                                         Remove
                                     </button>
@@ -91,7 +102,10 @@ export default function Checkout() {
                     onClick={()=>{
                         setAddAddress(!addAddress)
                     }}
-                >Add a new address!</button>
+                >
+                    {/* MAKE THIS A DIALOG */}
+                    Add a new address!
+                </button>
                 {
                     addAddress && (
                         <>
@@ -131,15 +145,27 @@ export default function Checkout() {
             </div>
 
             <div className="mt-4">
-                <h2 className="font-semibold text-xl">Paying with Cash on Delivery</h2>
+                <h2 className="text-2xl font-['Oswald'] my-4">PARCEL</h2>
+                <div className="w-full border-2 border-[#F3F3F3] p-5">
+                {
+                    data.map(el=>{
+                        return <ItemPreview id={el?.id} quantity={el.quantity} price={el?.price} options={el.options} />
+                    })
+                }
+                </div>
             </div>
 
-            <div className="flex justify-end">
+            <div className="mt-4">
+                <h2 className="text-2xl font-['Oswald'] my-4">PAYMENT</h2>
+                <h2 className="text-lg border-2 border-[#F3F3F3] p-5">Paying with <span className="underline">Cash on Delivery</span></h2>
+            </div>
+
+            <div className="p-3 w-1/3">
                 <button
-                    className="bg-[#6F48EC] text-white px-8 py-2 mt-5 rounded hover:underline cursor-pointer"
+                    className="bg-[#000] block text-center text-white px-10 py-2 mt-5 w-full hover:bg-[#555] cursor-pointer"
                     onClick={createOrder}
                 >
-                    Order!
+                    COMPLETE PURCHASE
                 </button>
             </div>
         </div>

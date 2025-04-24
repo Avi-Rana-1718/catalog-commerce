@@ -7,7 +7,7 @@ export class ProductService {
     constructor (private pool:DatabaseService){}
 
     async getAll() {
-        const result = await this.pool.query('SELECT name, productid, price, discount, images FROM "product" LIMIT 10');
+        const result = await this.pool.query('SELECT name, productid, price, discount, images, options FROM "product" ORDER BY addedat DESC');
 
         if(result.type=="SUCCESS") {
             return {type: "SUCCESS", msg: result.data.rows}
@@ -17,7 +17,7 @@ export class ProductService {
     }
 
     async getById(id:string) {
-        const result = await this.pool.query('SELECT name, productid, price, discount, images, description FROM "product" WHERE productid = $1', [id]);
+        const result = await this.pool.query('SELECT name, productid, price, discount, images, description, options FROM "product" WHERE productid = $1', [id]);
 
         if(result.type=="SUCCESS") {
             return {type: "SUCCESS", msg: result.data.rows[0]};
@@ -25,4 +25,9 @@ export class ProductService {
             return result;
         }
     }
+
+    // async getByName(name:string) {
+    //     const result = await this.pool.query('SELECT name, productid, price, discount, images, stock FROM "product" WHERE name LIKE $1', [`%${name}%`]);
+    //     return result;
+    // }
 }

@@ -1,24 +1,32 @@
 import { createRoot } from 'react-dom/client'
-import './index.css'
 import { BrowserRouter, Routes, Route } from "react-router";
-import Index from './pages';
-import Product from './pages/product';
-import Cart from './pages/cart';
-import Checkout from './pages/checkout';
-import Account from './pages/account';
-import Auth from './pages/auth';
-import Orders from './pages/orders';
+
+import HomePage from './pages/HomePage';
+import ProductPage from './pages/ProductPage';
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import AuthPage from './pages/AuthPage';
+import OrdersPage from './pages/OrdersPage';
+import AccountPage from './pages/AccountPage';
+
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminOrders from './pages/admin/AdminOrders';
+
+import './index.css'
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Index/>} />
-      <Route path="/product/:id" element={<Product/>} />
-      <Route path="/cart" element={<Cart/>} />
-      <Route path="/checkout" element={<Checkout/>} />
-      <Route path="/account" element={<Account/>} />
-      <Route path="/auth" element={<Auth/>} />
-      <Route path="/orders" element={<Orders/>} />
+      <Route path="/" element={<HomePage/>} />
+      <Route path="/product/:id" element={<ProductPage/>} />
+      <Route path="/cart" element={<CartPage/>} />
+      <Route path="/checkout" element={<CheckoutPage/>} />
+      <Route path="/account" element={<AccountPage/>} />
+      <Route path="/auth" element={<AuthPage/>} />
+      <Route path="/orders" element={<OrdersPage/>} />
+
+      <Route path="/admin" element={<AdminDashboard/>} />
+      <Route path="/admin/orders" element={<AdminOrders/>} />
     </Routes>
   </BrowserRouter>,
 )

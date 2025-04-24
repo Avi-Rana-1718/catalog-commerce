@@ -1,42 +1,30 @@
-import { useEffect, useState } from "react";
-import { FaSearch } from "react-icons/fa";
-import { FaCartShopping } from "react-icons/fa6";
+import { useState } from "react";
+import { LuHeart, LuSearch, LuShoppingCart, LuUser  } from "react-icons/lu";
 import { Link } from "react-router";
+import Search from "./Search";
 
 export default function Nav() {
 
-    const [username, setUsername] = useState("sign in")
-
-    useEffect(()=>{
-        const token = localStorage.getItem("token");
-
-        fetch("http://localhost:3030/user/get", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-        }).then(res=>res.json()).then(data=>{
-            if(data?.type=="SUCCESS") {
-                setUsername(data?.msg?.username)
-            }
-        })
-
-    }, [])
+    const [isVisible, setVisible] = useState(false)
 
     return (
-        <nav className=" flex items-center justify-between p-3 border-b-2 border-[#F2F2F2]">
-            <Link to={"/"} className="text-xl">Catalog</Link>
-            <div className="flex flex-1 justify-between max-w-[50vw] items-center bg-[#F2F2F2] rounded">
-                <input placeholder="Search" className="outline-[#6F48EC] w-full px-3 py-2"/>
-                <FaSearch className="mr-3"/>
-            </div>
-            <div className="flex gap-x-3">
+        <nav className="sticky top-0 bg-white flex items-center justify-between p-4 z-50">
+            <Link to={"/"} className="text-xl text-[#E50010]">
+                <img src="/logo.png" className="w-20" />
+            </Link>
+            <div className="flex gap-x-7 text-xl">
+                <LuSearch onClick={()=>{
+                    setVisible(true);
+                }}/>
                 <Link to={"/account"} className="hover:underline">
-                    Hello, {username}!
+                <LuUser/>         
                 </Link>
-                <Link to={"/cart"} className="flex items-center hover:underline">
-                    <FaCartShopping className="text-lg mx-3"/>Cart
+                <LuHeart/>
+                <Link to={"/cart"} className="hover:underline">
+                    <LuShoppingCart/>
                 </Link>
             </div>
+            {isVisible && <Search setVisible={setVisible}/>}
         </nav>
     )
 }
