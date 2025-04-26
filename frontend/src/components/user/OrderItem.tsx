@@ -1,8 +1,7 @@
-import { FaRegCheckCircle } from "react-icons/fa";
-import { FaCircleXmark } from "react-icons/fa6";
-
 import ItemPreview from "./ItemPreview";
 import { useNavigate } from "react-router";
+import { LuCircleCheck, LuCircleX } from "react-icons/lu";
+import toast, { Toaster } from 'react-hot-toast';
 
 interface OrderItemProps {
     address:{name:string, address:string, mobile:string},
@@ -14,30 +13,31 @@ interface OrderItemProps {
 
 export default function OrderItem({address, orderedAt, orderID, items, status}:OrderItemProps) {
     const router = useNavigate()
+    const date = new Date(orderedAt)
 
     return (
-        <li className="border-2 border-[#F3F3F3] m-2 rounded">
+        <li className="border-2 border-[#F3F3F3] my-2 md:m-2 rounded">
             <div className="bg-[#F0F2F2] flex justify-between p-3">
                 <h5>
                     Ordered at
-                    <span className="ml-1">{orderedAt}</span>
+                    <span className="ml-1">{date.getHours()+":"+date.getMinutes() + " - " + date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()}</span>
                 </h5>
                 <span>
                     OrderID: <small>{orderID}</small>
                 </span>
             </div>
             <div className="p-3">
-                <h3 className="font-semibold text-xl flex items-center">
-                    {status=="Confirmed"?<FaRegCheckCircle className="inline mr-1 text-[#008000]"/>:<FaCircleXmark className="inline mr-1 text-red-500"/>}
+                <h3 className="text-2xl flex items-center uppercase font-['Oswald'] mb-2">
+                    {status=="Confirmed"?<LuCircleCheck className="inline mr-1 text-[#008000]"/>:<LuCircleX className="inline mr-1 text-red-500"/>}
                     {status}
                 </h3>
                 { status!="Cancelled" && (
                 <>
-                    <span className="block">Delivering to {address?.name}</span> 
+                    <span className="block">Delivering to {address?.name}</span>
                     <small className="text-[#282828]">{address?.address} | {address?.mobile}</small>
                 </>
                 )}
-                <h4 className="mt-3 text-lg font-medium">Items ({items.length})</h4>
+                <h4 className="mt-3 text-lg text-[#555] font-semibold uppercase" >Items [{items.length}]</h4>
                 <ul className="mt-1 border-t-2 border-[#F3F3F3] pt-3">
                     {items.map((el)=>{
                         return <ItemPreview id={el?.id} options={el?.options} price={el?.price} quantity={el?.quantity} key={el?.id}/>
@@ -45,9 +45,6 @@ export default function OrderItem({address, orderedAt, orderID, items, status}:O
                 </ul>
             </div>
             {status!="Cancelled" && <div className="flex justify-end border-t-2 border-[#F3F3F3] p-3">
-                    <span className="text-blue-500 hover:underline cursor-pointer mr-3">
-                        Change address
-                    </span>
                     <span
                         className="text-blue-500 hover:underline cursor-pointer"
                         onClick={()=>{
@@ -60,6 +57,8 @@ export default function OrderItem({address, orderedAt, orderID, items, status}:O
                                 console.log(data);
                                 if(data.type=="SUCCESS") {
                                     router(0)
+                                } else {
+                                    toast.error(data?.msg)
                                 }
                             })
                         }}
@@ -67,6 +66,10 @@ export default function OrderItem({address, orderedAt, orderID, items, status}:O
                         Cancel order
                     </span>
             </div>}
+            <Toaster
+                position="bottom-right"
+                reverseOrder={false}
+                />
         </li>
     )
 }

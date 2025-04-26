@@ -22,7 +22,7 @@ export default function ProductItem({name, productID, stock, thumbnail, openEdit
                     openEdit(productID)
                 }}/>
             </td>
-            <td>
+            <td className="text-red-700">
                 <LuTrash className="cursor-pointer" onClick={()=>{
                     fetch(`http://localhost:3030/admin/deleteProduct?productID=${productID}`, {
                         method: "DELETE",

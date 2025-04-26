@@ -3,6 +3,17 @@ import { AdminService } from "./admin.service";
 import { AuthGuard } from "@nestjs/passport";
 import { ProductDto } from "./dto";
 import { Request } from "express";
+import { nRequest } from "src/interfaces/request.interface";
+
+
+// check if user is admin
+// add pagination
+// add catgories
+// error handling
+// coupon uses
+// stock less
+// empty states - frontend
+// dynamic options
 
 @Controller("admin")
 export class AdminController {
@@ -42,11 +53,5 @@ export class AdminController {
     @Delete("deleteProduct")
     deleteProduct(@Req() req:nRequest, @Query("productID") productID:string) {
         return this.adminService.deleteProduct(req.user?.email, productID)
-    }
-}
-
-interface nRequest extends Request {
-    user?: {
-        email:string
     }
 }

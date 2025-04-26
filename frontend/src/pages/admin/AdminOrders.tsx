@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import AdminNav from "../../components/admin/AdminNav";
 import AdminSidenav from "../../components/admin/AdminSidenav";
-import AdminAdd from "../../components/admin/AdminAdd";
 import OrderItem from "../../components/admin/OrderItem";
+import Input from "../../components/ui/Input";
 
 export default function AdminOrders() {
     const [data, setData] = useState(null)
-    const [addVisible, setAddVisible] = useState(false)
+    const [stats, setStats] = useState(null)
 
     const [query, setQuery] = useState("")
     const [queryStatus, setQueryStatus] = useState(null)
@@ -19,22 +19,53 @@ export default function AdminOrders() {
         }).then(res=>res.json()).then(data=>{
             setData(data.msg)
         })
+
+        fetch("http://localhost:3030/admin/stats", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
+        }).then(res=>res.json()).then(data=>{
+            console.log(data);
+            
+            if(data.type=="SUCCESS") {
+                setStats(data.msg)
+            }
+        })
+
     }, [])
+
+
 
     return (
         <>
         <AdminNav />
         <div className="p-4 flex">
-            <AdminSidenav setAddVisible={setAddVisible}/>
+            <AdminSidenav />
             <div className="flex-1">
             <h3 className="text-6xl font-['Oswald'] uppercase">Orders</h3>
                 <p className="text-[#666] mt-4">
                    A list of the orders received for your products:-
                 </p>
 
+                <section className="flex gap-x-5 mt-5">
+                    <div className="p-4 border-2 border-[#F3F3F3] rounded">
+                        <h4>Total confirmed</h4>
+                        <h2 className="text-4xl font-bold text-green-700 mt-1">
+                            {stats && stats?.confirmed}
+                            <span className="text-[#666] text-lg ml-1">orders</span>
+                        </h2>
+                    </div>
+                    <div className="p-4 border-2 border-[#F3F3F3] rounded">
+                        <h4>Total cancelled</h4>
+                        <h2 className="text-4xl font-bold text-red-700">
+                            {stats && stats?.cancelled}
+                            <span className="text-[#666] text-lg ml-1">orders</span>
+                        </h2>
+                    </div>
+                </section>
+
                 <div className="mt-4">
-                    <label className="uppercase" htmlFor="search">Search by email</label>
-                        <input id="search" placeholder="Search by email" value={query} onChange={(e)=>setQuery(e.target.value)} className="border w-full border-[#dad8d8] focus:border-[#555] px-3 py-2 focus:outline-none block"/>
+                        <Input label="Search by email" placeholder="Search by email" value={query} onChange={(e)=>setQuery(e.target.value)}/>
                         <div className="mt-4">
                             <input id="confirmed" name="status" type="radio" value="Confirmed" checked={queryStatus=="Confirmed"} onChange={(e)=>setQueryStatus(e.target.value)}/>
                             <label htmlFor="confirmed" className="ml-1 mr-2">Confirmed</label>
@@ -50,7 +81,6 @@ export default function AdminOrders() {
             </ul>
             </div>
         </div>
-            {addVisible && <AdminAdd setVisible={setAddVisible}/>}
         </>
     )
 }

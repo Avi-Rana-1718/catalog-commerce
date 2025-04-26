@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router";
-import Nav from "../components/Nav";
+import Nav from "../components/user/Nav";
 import { useEffect, useState } from "react";
-import AccountNav from "../components/AccountNav";
+import AccountNav from "../components/user/AccountNav";
 import { LuTrash, LuTrash2 } from "react-icons/lu";
 
 export default function AccountPage() {
@@ -16,8 +16,7 @@ export default function AccountPage() {
         fetch(`http://localhost:3030/user/get`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
-            },
-            cache: "force-cache"
+            }
         }).then(res=>res.json()).then(data=>{
             setData(data.msg);  
         })
@@ -26,7 +25,7 @@ export default function AccountPage() {
     return (
         <>
         <Nav />
-        <div className="p-4 flex">
+        <div className="p-4 flex flex-col-reverse md:flex-row">
             <AccountNav/>
             <div className="p-4">
                 <h4 className="text-5xl mt-4 uppercase font-['Oswald']">Welcome, {data?.username}!</h4>

@@ -13,6 +13,8 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminOrders from './pages/admin/AdminOrders';
 
 import './index.css'
+import SearchPage from './pages/SearchPage';
+import AdminCoupons from './pages/admin/AdminCoupons';
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -24,9 +26,11 @@ createRoot(document.getElementById('root')!).render(
       <Route path="/account" element={<AccountPage/>} />
       <Route path="/auth" element={<AuthPage/>} />
       <Route path="/orders" element={<OrdersPage/>} />
+      <Route path="/search" element={<SearchPage/>} />
 
       <Route path="/admin" element={<AdminDashboard/>} />
       <Route path="/admin/orders" element={<AdminOrders/>} />
+      <Route path="/admin/coupons" element={<AdminCoupons/>} />
     </Routes>
   </BrowserRouter>,
 )

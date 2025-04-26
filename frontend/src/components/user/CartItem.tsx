@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { LuMinus, LuPlus } from "react-icons/lu"
+import toast, { Toaster } from 'react-hot-toast';
 
 interface CartItemProps {
     id:string,
@@ -23,13 +24,15 @@ export default function CartItem({id, quantity, options, setTotal, maxStock}:Car
 
     function addQuantity(id) {
         if(quantity>=maxStock) {
+            toast.error("Maximum quantity reached.")
             return;
         }
 
         let nData = JSON.parse(localStorage.getItem("cart"));
         for(let i=0;i<nData.length;i++) {
-            if(nData[i].id==id && nData[i].quantity) {
+            if(nData[i].id==id && nData[i].quantity && !Object.keys(nData[i].options).map(key=>(nData[i].options[key]==options[key])).includes(false)) {
                 nData[i].quantity++;
+                break;
             }
         }
         localStorage.setItem("cart", JSON.stringify(nData));        
@@ -39,11 +42,12 @@ export default function CartItem({id, quantity, options, setTotal, maxStock}:Car
     function minusQuantity(id) {
         let nData = JSON.parse(localStorage.getItem("cart"));
         for(let i=0;i<nData.length;i++) {
-            if(nData[i].id==id) {
+            if(nData[i].id==id && !Object.keys(nData[i].options).map(key=>(nData[i].options[key]==options[key])).includes(false)) {
                 nData[i].quantity--;
                 if(nData[i].quantity==0) {
                     nData.splice(i, 1);
                 }
+                break;
             }
         }
         localStorage.setItem("cart", JSON.stringify(nData));
@@ -69,6 +73,7 @@ export default function CartItem({id, quantity, options, setTotal, maxStock}:Car
                         </>
                 ):(<span className="font-bold">Rs. {(data?.price-data?.price*(data?.discount/100)).toFixed(2)}</span>)}
                 <table className="text-[#666] mt-3 block">
+                    <tbody>
                     {
                         Object.keys(options).map(key=>{
                             return (
@@ -88,6 +93,7 @@ export default function CartItem({id, quantity, options, setTotal, maxStock}:Car
                         <td className="font-bold">Total</td>
                         <td className="text-right">Rs. {((data?.price-(data?.price*(data?.discount/100)))*quantity).toFixed(2)}</td>
                     </tr>
+                    </tbody>
                 </table>
 
                 <div className="flex w-32 justify-between border border-[#666] mt-4 p-3">
@@ -100,6 +106,13 @@ export default function CartItem({id, quantity, options, setTotal, maxStock}:Car
                     </button>
                 </div>
             </div>
+            <Toaster
+            position="bottom-right"
+            reverseOrder={false}
+            toastOptions={{
+                className:"text-xl"
+            }}
+        />
         </li>
     )
 }

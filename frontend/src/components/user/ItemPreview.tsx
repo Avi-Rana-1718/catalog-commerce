@@ -22,7 +22,7 @@ export default function ItemPreview({id, quantity, price, options}:ItemPreview) 
                 src={data?.images[0]}
                 className="w-20"
             />
-            <p className="ml-4">
+            <div className="ml-4">
                 <h4>{data?.name}</h4>
                 <div className="text-[#666]">
                     {Object.keys(options).map(key=>(
@@ -33,7 +33,7 @@ export default function ItemPreview({id, quantity, price, options}:ItemPreview) 
                     Quantity: {quantity} <br/>
                     Price: {Number(price).toFixed(2)}
                 </span>
-            </p>
+            </div>
         </li>
     )
 }

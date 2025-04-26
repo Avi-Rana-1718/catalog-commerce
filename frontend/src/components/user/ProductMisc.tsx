@@ -13,7 +13,7 @@ export default function ProductMisc({description}) {
             <details className="block mt-16 cursor-pointer">
             <summary onClick={()=>{
                 setDescOpen(!isDescOpen)
-            }} className="select-none font-semibold text-[#666] mb-2 w-full flex justify-between items-center text-lg">
+            }} className="select-none font-semibold mb-2 w-full flex justify-between items-center text-lg">
                 <h6>DESCRIPTION & FIT</h6>
                 {!isDescOpen?<LuPlus/>:<LuMinus/>}
             </summary>
@@ -23,7 +23,7 @@ export default function ProductMisc({description}) {
             <details className="block mt-3 cursor-pointer">
             <summary onClick={()=>{
                 setCareOpen(!isCareOpen)
-            }} className="select-none font-semibold text-[#666] mb-2 w-full flex justify-between items-center text-lg">
+            }} className="select-none font-semibold mb-2 w-full flex justify-between items-center text-lg">
                 <h6>CARE GUIDE</h6>
                 {!isCareOpen?<LuPlus/>:<LuMinus/>}
             </summary>
@@ -41,7 +41,7 @@ export default function ProductMisc({description}) {
             <details className="block mt-3 cursor-pointer">
             <summary onClick={()=>{
                 setDelOpen(!isDelOpen)
-            }} className="select-none font-semibold text-[#666] mb-2 w-full flex justify-between items-center text-lg">
+            }} className="select-none font-semibold mb-2 w-full flex justify-between items-center text-lg">
                 <h6>DELIVERY AND PAYMENT</h6>
                 {!isDelOpen?<LuPlus/>:<LuMinus/>}
             </summary>

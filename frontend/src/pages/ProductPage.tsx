@@ -1,10 +1,11 @@
 import { useNavigate, useParams } from "react-router"
-import Nav from "../components/Nav";
+import Nav from "../components/user/Nav";
 import { useEffect, useState } from "react";
-import OptionsItems from "../components/OptionsItems";
+import OptionsItems from "../components/user/OptionsItems";
 import { LuHeart, LuLoaderCircle } from "react-icons/lu";
-import ProductMisc from "../components/ProductMisc";
-import Footer from "../components/Footer";
+import ProductMisc from "../components/user/ProductMisc";
+import Footer from "../components/user/Footer";
+import PrimaryBtn from "../components/ui/PrimaryBtn";
 
 export default function ProductPage() {
     const params = useParams()
@@ -42,20 +43,20 @@ export default function ProductPage() {
 return (
     <>
     <Nav />
-    <div className="flex">
-        <div className="grid grid-cols-2 w-1/2">
+    <div className="md:flex">
+        <div className="grid md:grid-cols-2 md:w-1/2">
             {
                 data?.images.map((el, i)=>(
                     <img
                         src={el}
-                        className={i==0||i>2?"col-span-2":null}
+                        className={i==0||i>2?"col-span-2":"hidden md:block"}
                     />
                 ))
             }
         </div>
-        <div className="p-10 md::p-36 flex-1 w-1/2 ml-16">
+        <div className="p-5 md:p-10 flex-1 md:w-1/2 md:ml-16">
             <div className="sticky top-20">
-            <div className="flex w-full justify-between">
+            <div>
                 <div>
                     <h3 className="text-2xl uppercase">{data?.name}</h3>
                     <span className="text-xl font-bold block">Rs. 
@@ -68,7 +69,6 @@ return (
                     </span>
                     <span>MRP inclusive of all taxes</span>
                 </div>
-                <LuHeart className="ml-32 text-xl cursor-pointer"/>
             </div>
 
             {/* OPTIONS */}
@@ -77,7 +77,7 @@ return (
             return (
                 <div key={el}>
                     <h3 className="text-md uppercase mt-10">
-                        {options[el]!=undefined?<>SELECTED {el}: {options[el]}</>:<>{el}:</>}
+                        {options[el]!=undefined?<>{el}: {options[el]}</>:<>{el}:</>}
                     </h3>
                     <ul className="flex mt-3 border-l border-gray-300">
                         {
@@ -100,17 +100,13 @@ return (
             })
             }
 
-            <button
+            <PrimaryBtn
+                label="Add"
+                disabled={Object.keys(options).length!=Object.keys(data.options).length}
                 onClick={()=>{
-                     if(Object.keys(options).length!=Object.keys(data.options).length) {
-                        alert("Select all the options!")
-                        return;
-                    }
 
                     let nData = JSON.parse(localStorage.getItem("cart"));
-                    let existIndex = nData!=null?nData.findIndex(el=>el.id==params.id && !Object.keys(el.options).map(key=>{
-                            return el.options[key]==options[key]
-                    }).includes(false)):-1;
+                    let existIndex = nData!=null?nData.findIndex(el=>el.id==params.id && !Object.keys(el.options).map(key=>(el.options[key]==options[key])).includes(false)):-1;
                     
                     let obj = {
                         id:params.id,
@@ -132,10 +128,8 @@ return (
 
                     navigate("/cart")
                 }}
-                className="bg-[#000] text-white px-10 py-2 mt-9 w-full disabled:bg-[#555555] disabled:cursor-not-allowed hover:bg-[#555555] cursor-pointer"
-            >
-                ADD
-            </button>
+            />
+
             
             <div>
                 <ProductMisc description={data?.description}/>

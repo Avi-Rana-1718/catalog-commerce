@@ -13,7 +13,7 @@ interface ProductCartProps {
 export default function ProductCard({name, price, discount, images, id, stock}:ProductCartProps) {
     return (
         <>
-        <Link to={`/product/${id}`} className="group w-1/6">
+        <Link to={`/product/${id}`} className="group w-1/2 md:w-1/6">
             <div className="relative">
                 <img 
                     src={images && images[0]}
@@ -27,7 +27,7 @@ export default function ProductCard({name, price, discount, images, id, stock}:P
             </div>
 
             <div className="mt-4">
-                <h3 className="text-lg group-hover:underline">{name}</h3>
+                <h3 className="md:text-lg group-hover:underline">{name}</h3>
                 <span className="font-bold">Rs. 
                     {discount>0?(
                         <>

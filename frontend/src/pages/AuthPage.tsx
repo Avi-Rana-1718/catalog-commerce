@@ -1,4 +1,8 @@
 import { useState } from "react"
+import Input from "../components/ui/Input";
+import PrimaryBtn from "../components/ui/PrimaryBtn";
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from "react-router";
 
 export default function AuthPage() {
 
@@ -7,17 +11,20 @@ export default function AuthPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const navigate = useNavigate()
+
     return (
+        <>
         <div className="flex items-center justify-center h-screen">
-            <div>
-                <h3 className="text-xl">{signUp?"Sign up":"Login"}</h3>
+            <div className="w-1/5">
+                <h3 className="text-4xl font-['Oswald'] uppercase ">{signUp?"Sign up":"Login"}</h3>
                 <div className="flex flex-col gap-y-2 mt-4">
-                    {signUp && <input type="text" placeholder="Username" value={username} onChange={(e)=>{setUsername(e.target.value)}} className="px-3 py-2 bg-[#F2F2F2] outline-blue-500 rounded"/>}
-                    <input type="email" placeholder="Email" value={email} onChange={(e)=>{setEmail(e.target.value)}} className="px-3 py-2 bg-[#F2F2F2] outline-blue-500 rounded"/>
-                    <input type="password" placeholder="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}} className="px-3 py-2 bg-[#F2F2F2] outline-blue-500 rounded"/>
+                    {signUp && <Input type="text" placeholder="Username" value={username} onChange={(e)=>{setUsername(e.target.value)}}/>}
+                    <Input type="email" placeholder="Email" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
+                    <Input type="password" placeholder="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
                 </div>
-                <button
-                    className="w-full mb-2 bg-[#6F48EC] text-white px-8 py-2 mt-5 rounded hover:underline cursor-pointer"
+                <PrimaryBtn
+                    label={signUp?"Sign up":"Login"}
                     onClick={()=>{
                         fetch(`http://localhost:3030/auth/${signUp?"create":"login"}`, {
                             method: "POST",
@@ -33,25 +40,35 @@ export default function AuthPage() {
                             console.log(data);
                             
                             if(data?.type=="SUCCESS") {
+                                if(signUp==false) {
+                                    navigate("/account")
+                                }
                                 setSignUp(false);
+                                toast.success(data?.msg)
+                            } else {
+                                toast.error(data?.msg)
                             }
 
+
                             if(!signUp && data?.type=="SUCCESS") {
-                                localStorage.setItem("token", data.msg)
+                                localStorage.setItem("token", data.data)
                             }
                             
                         })
                     }}
-                >
-                    {signUp?"Sign up":"Login"}
-                </button>
+                />
                 <span
                     onClick={()=>{
                         setSignUp(!signUp)
                     }} 
-                    className="text-[#2b2b2b] hover:underline cursor-pointer"
+                    className="text-[#2b2b2b] block mt-2 hover:underline cursor-pointer"
                 >{signUp?"Don't have an account? Sign up!":"Already have an account? Login!"}</span>
             </div>
         </div>
+        <Toaster
+            position="bottom-right"
+            reverseOrder={false}
+            />
+        </>
     )
 }

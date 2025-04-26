@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router";
 export default function AccountNav() {
     const navigate = useNavigate()
     return (
-        <ul className="text-lg uppercase mt-32 mr-32">
+        <ul className="text-lg uppercase ml-5 md:mt-32 md:mr-32">
                 <li>
                     <Link to={"/account"} className={`hover:underline`}>
                     Account

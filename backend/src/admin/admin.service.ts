@@ -9,7 +9,12 @@ export class AdminService {
 
     async addProduct(dto:ProductDto, email: string | undefined) {
         const result = await this.pool.query('INSERT INTO "product" (name, addedby, price, discount, description, images, options) VALUES ($1, $2, $3::numeric, $4::numeric, $5, $6, $7::json)', [dto.name, email, dto.price, dto.discount, dto.description, dto.images, dto?.options]);
-        return result;
+        
+        if(result.type=="SUCCESS" && result.data.rowCount==1) {
+            return {type: "SUCCESS", msg: "Successfully added product!"}
+        } else {
+            return {type: "Error", msg: "Unable to add product."}
+        }
     }
 
     async getProductsByEmail(email: string | undefined) {
@@ -64,7 +69,7 @@ export class AdminService {
     }
 
     async getOrders(email: string | undefined) {
-        const result = await this.pool.query(`SELECT o.* FROM "order" o WHERE EXISTS (SELECT 1 FROM product p WHERE p.addedby = $1 AND EXISTS (SELECT 1 FROM jsonb_array_elements(o.items) AS item WHERE (item->>'id')::uuid = p.productid));`, [email])
+        const result = await this.pool.query(`SELECT o.* FROM "order" o WHERE EXISTS (SELECT 1 FROM product p WHERE p.addedby = $1 AND EXISTS (SELECT 1 FROM jsonb_array_elements(o.items) AS item WHERE (item->>'id')::uuid = p.productid)) ORDER BY orderedat DESC`, [email])
         
         if(result.type=="SUCCESS" && result.data.rowCount>=1) {
             return {type: "SUCCESS", msg: result.data.rows}

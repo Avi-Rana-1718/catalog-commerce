@@ -4,8 +4,9 @@ import AdminSidenav from "../../components/admin/AdminSidenav";
 import AdminNav from "../../components/admin/AdminNav";
 
 import AdminEdit from "../../components/admin/AdminEdit";
-import { LuTrendingDown, LuTrendingUp } from "react-icons/lu";
-import AdminAdd from "../../components/admin/AdminAdd";
+import { LuTrendingUp } from "react-icons/lu";
+import Input from "../../components/ui/Input";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function AdminDashboard() {
 
@@ -22,8 +23,6 @@ export default function AdminDashboard() {
     const [editData, setEditData] = useState(null)
 
     const [query, setQuery] = useState("")
-
-    const [addVisible, setAddVisible] = useState(false)
  
     useEffect(()=>{
         fetch("http://localhost:3030/admin/all", {
@@ -57,8 +56,8 @@ export default function AdminDashboard() {
     return (
     <>
         <AdminNav />
-        <div className="p-4 flex">
-            <AdminSidenav setAddVisible={setAddVisible}/>
+        <div className="p-4 md:flex">
+            <AdminSidenav />
             <div className="flex-1">
                 <h3 className="text-6xl font-['Oswald'] uppercase">Dashboard</h3>
                 <p className="text-[#666] mt-4">
@@ -68,20 +67,19 @@ export default function AdminDashboard() {
                 <section className="flex gap-x-5 mt-5">
                     <div className="p-4 border-2 border-[#F3F3F3] rounded">
                         <h4>Total Revenue</h4>
-                        <h2 className="text-4xl font-bold">Rs. {stats && (stats?.revenue).toFixed(2)}</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold">Rs. {stats && (stats?.revenue).toFixed(2)}</h2>
                         <span className="text-[#666]">{stats!=null && stats?.revenueToday>0?<LuTrendingUp className="text-green-600 inline mr-1"/>:null}Rs. {stats && (stats.revenueToday).toFixed(2)} worth of sales today</span>
                     </div>
                     <div className="p-4 border-2 border-[#F3F3F3] rounded">
                         <h4>Total Orders</h4>
-                        <h2 className="text-4xl font-bold">{stats && stats?.total}</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold">{stats && stats?.total}</h2>
                         <span className="text-[#666]">{stats!=null && stats?.ordersToday>0?<LuTrendingUp className="text-green-600 inline mr-1"/>:null}{stats && stats.ordersToday} orders today</span>
 
                     </div>
                 </section>
 
                 <div className="mt-4">
-                    <label className="uppercase" htmlFor="search">Search by name</label>
-                    <input id="search" placeholder="Search by name" value={query} onChange={(e)=>setQuery(e.target.value)} className="border w-full border-[#dad8d8] focus:border-[#555] px-3 py-2 focus:outline-none block"/>
+                    <Input label="Search by Name" placeholder="Search by name" value={query} onChange={(e)=>setQuery(e.target.value)}/>
                 </div>
 
                 <table className="w-full text-left mt-5">
@@ -110,8 +108,11 @@ export default function AdminDashboard() {
                 </table>
             </div>
         </div>
-        {drawerVisible && <AdminEdit productID={editID} setVisible={setDrawerVisible}/>}
-        {addVisible && <AdminAdd setVisible={setAddVisible}/>}
+        <Toaster
+                position="bottom-right"
+                reverseOrder={false}
+        />
+        {drawerVisible && <AdminEdit productID={editID} setVisible={setDrawerVisible} toast={toast}/>}
     </>
     )
 }

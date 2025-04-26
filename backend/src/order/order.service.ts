@@ -6,15 +6,19 @@ import { OrderDto } from "./dto";
 export class OrderService {
     constructor(private pool:DatabaseService){}
 
-   async getOrdersByEmail(email:string|undefined) {
+   async getOrdersByEmail(email:string|undefined, offset:number) {
         if(typeof email == undefined) {
             return {type:"ERROR", msg: "Undefined email"}
         }
 
-        const result = await this.pool.query('SELECT * FROM "order" WHERE orderedby = $1 ORDER BY orderedat DESC', [email]);
+        const result = await this.pool.query('SELECT * FROM "order" WHERE orderedby = $1 ORDER BY orderedat DESC LIMIT 10 OFFSET $2', [email, (offset-1)*10]);
 
         if(result.type=="SUCCESS" && result.data.rowCount>=1) {
-            return {type:"SUCCESS", msg: result.data.rows};
+            let data = {
+                totalCount: 10,
+                rows: result.data.rows
+            }
+            return {type:"SUCCESS", msg: data};
         } else {
             return {type: "ERROR", msg: "Unable to find any orders!"};
         }

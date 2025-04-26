@@ -20,7 +20,7 @@ export class AuthService {
     const result = await this.pool.query('INSERT INTO "user" (email, password, username) VALUES ($1, $2, $3)',[dto.email, dto.password, dto.username],);
 
     if (result.type == 'SUCCESS' && result.data.rowCount > 0) {
-      return { type: 'SUCCESS', msg: 'Created new user' };
+      return { type: 'SUCCESS', msg: 'Successfully created new user!' };
     } else {
       return result;
     }
@@ -40,7 +40,8 @@ export class AuthService {
       delete result.data.rows[0].password;
       return {
         type: 'SUCCESS',
-        msg: await this.signToken(result.data.rows[0]),
+        msg: "Sucessfully logged in user!",
+        data: await this.signToken(result.data.rows[0]),
       };
     } else {
       return {type: "ERROR", msg: "Invalid email or password!"};
