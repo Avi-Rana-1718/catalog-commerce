@@ -16,9 +16,9 @@ export class OrderService {
 
         const result = await this.pool.query('SELECT * FROM "order" WHERE orderedby = $1 ORDER BY orderedat DESC LIMIT 10 OFFSET $2', [email, (offset-1)*limit]);
 
-        if(result.type=="SUCCESS" && result.data.rowCount>=1) {
+        if(result.type=="SUCCESS" && result.data.rowCount>=1) {            
             let data = {
-                totalPages: Math.ceil(((await this.pool.query('SELECT COUNT(*) FROM "order"'))).data.rows[0].count/limit),
+                totalPages: Math.ceil(((await this.pool.query('SELECT COUNT(*) FROM "order" WHERE orderedby = $1', [email]))).data.rows[0].count/limit),
                 rows: result.data.rows
             }
             return {type:"SUCCESS", msg: data};

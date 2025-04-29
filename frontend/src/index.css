@@ -2,7 +2,7 @@
 
 @layer {
     body {
-        @apply font-['Lato']
+        @apply font-['Lato'] h-screen overscroll-none
     }
 }
 

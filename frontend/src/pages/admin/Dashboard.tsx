@@ -56,7 +56,7 @@ export default function AdminDashboard() {
     return (
     <>
         <AdminNav />
-        <div className="p-4 md:flex">
+        <div className="p-4 md:flex h-screen">
             <AdminSidenav />
             <div className="flex-1">
                 <h3 className="text-6xl font-['Oswald'] uppercase">Dashboard</h3>
@@ -90,7 +90,7 @@ export default function AdminDashboard() {
                             <th>Stock</th>
                         </tr>
                     </thead>
-                    <tbody className="">
+                    <tbody>
                         {data.filter(el=>(el.name.toLowerCase()).includes(query.toLowerCase())).map(el=>{
                             let hasZeroStock=0;
                             Object.keys(el?.options).forEach(key=>{

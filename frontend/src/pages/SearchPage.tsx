@@ -3,7 +3,7 @@ import Nav from "../components/user/Nav";
 import ProductCard from "../components/user/ProductCard";
 import { useSearchParams } from "react-router";
 import { LuListFilter, LuShoppingBag } from "react-icons/lu";
-import Footer from "../components/user/Footer";
+import Filter from "../components/user/Filter";
 
 enum filterType {
     low2High,
@@ -16,7 +16,12 @@ export default function SearchPage() {
 
     const [data, setData] = useState(null);
     const [query] = useState(searchParams.get("name"))
+
+    const [min, setMin] = useState(0)
+    const [max, setMax] = useState(10000)
+
     const [isLoading, setLoading] = useState(true)
+    const [filterVisible, setFilterVisible] = useState(false)
 
     useEffect(()=>{
         setLoading(true)
@@ -38,7 +43,7 @@ export default function SearchPage() {
                 </div>
                 <h5 className="uppercase text-3xl font-bold">RESULTS [{data!=null?data.length:0}]</h5>
                 <div className="flex justify-end mb-2">
-                    <h3 className="font-bold cursor-pointer hover:underline text-lg mt-2 uppercase flex items-center text-[#555]">
+                    <h3 onClick={()=>{setFilterVisible(true)}} className="font-bold cursor-pointer hover:underline text-lg mt-2 uppercase flex items-center text-[#555]">
                         Filter
                         <LuListFilter className="ml-1"/>
                     </h3>
@@ -52,8 +57,9 @@ export default function SearchPage() {
                 }
 
                 <ul className="flex flex-wrap mt-5">
-                {data && data.map((el:any)=>{
+                {data && data.filter(el=>(el.price>=min && el.price<=max)).map((el:any)=>{
                         let totalStock=0;
+                
                          Object.keys(el?.options).forEach(key=>{
                             el?.options[key].forEach(e=>{
                                 totalStock+=typeof e?.stock === "number"?e?.stock:0;
@@ -71,6 +77,7 @@ export default function SearchPage() {
                    </div>
                 }
             </div>
+                {filterVisible && <Filter setVisible={setFilterVisible} min={min} setMin={setMin} max={max} setMax={setMax}/>}
             </>
         )
 }

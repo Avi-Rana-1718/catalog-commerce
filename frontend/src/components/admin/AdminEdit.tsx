@@ -42,7 +42,7 @@ export default function AdminEdit({productID, setVisible, toast}: {productID:num
                 <Input label="Name" value={name} onChange={(e)=>{setName(e.target.value)}}/>
                 <Input label="Price" type="number" value={price} onChange={(e)=>{setPrice(e.target.value)}}/>
                 <label htmlFor="discount" className="uppercase">Discount</label>
-                <input id="discount" type="number" max="100"  className="border w-full border-[#dad8d8] focus:border-[#555] px-3 py-2 focus:outline-none block" value={discount} onChange={(e)=>{setDiscount(e.target.value)}}/>
+                <input id="discount" placeholder="10%" type="number" max="100"  className="border w-full border-[#dad8d8] focus:border-[#555] px-3 py-2 focus:outline-none block" value={discount} onChange={(e)=>{setDiscount(e.target.value)}}/>
                 <label htmlFor="options" className="uppercase mt-2 block">Options</label>
                 {options && <PropertyPlayground values={options} setValues={setOptions} />}
 

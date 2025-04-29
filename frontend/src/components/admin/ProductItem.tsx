@@ -18,7 +18,7 @@ export default function ProductItem({name, productID, stock, thumbnail, openEdit
                 </Link>
             </td>
             <td>
-                <LuSquarePen onClick={()=>{
+                <LuSquarePen className="cursor-pointer" onClick={()=>{
                     openEdit(productID)
                 }}/>
             </td>

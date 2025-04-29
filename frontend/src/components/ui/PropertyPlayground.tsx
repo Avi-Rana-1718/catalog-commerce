@@ -93,14 +93,12 @@ export default function PropertyPlayground({values, setValues}) {
                                     }}/>
                                     <span
                                         onClick={()=>{
-                                            console.log(values);
-                                            
                                             let obj = {...values};
-                                            obj[key].filter(value=>(value.name==el.name))
+                                            delete obj[key][index]
                                             setValues(obj)
                                         }}
                                     >
-                                        X
+                                    <LuTrash className="text-red-700 cursor-pointer" /> 
                                     </span>
                                 </div>
                             )
