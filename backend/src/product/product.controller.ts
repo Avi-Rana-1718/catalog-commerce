@@ -1,5 +1,7 @@
-import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { Controller, Get, Param, Post, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ProductService } from "./product.service";
+import { FileInterceptor } from "@nestjs/platform-express"
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("product")
 export class ProductController{
@@ -15,14 +17,21 @@ export class ProductController{
         return this.productService.getByName(name)
     }
 
-    @Post("search")
-    getByCategory(@Body() body) {
-        return this.productService.getByCategory(body.categories)
+    @Get("category/:id")
+    getByCategory(@Param("id") category:string) {
+        return this.productService.getByCategory(category)
     }
 
     @Get(":id")
     getById(@Param("id") productID:string) {
         return this.productService.getById(productID);
+    }
+
+    @UseGuards(AuthGuard("jwt"))
+    @Post("uploadImage")
+    @UseInterceptors(FileInterceptor("file"))
+    uploadFile(@UploadedFile() file:Express.Multer.File) {
+        return {type:"SUCCESS", msg: "http://localhost:3030/uploads/" + file.filename}
     }
 
 

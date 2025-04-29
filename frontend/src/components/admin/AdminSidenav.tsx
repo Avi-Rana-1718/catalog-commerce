@@ -6,7 +6,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export default function AdminSidenav() {
 
-    const [isVisible, setAddVisible] = useState(true)
+    const [isVisible, setAddVisible] = useState(false)
 
     return (
         <>

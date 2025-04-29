@@ -3,6 +3,7 @@ import Input from "../components/ui/Input";
 import PrimaryBtn from "../components/ui/PrimaryBtn";
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from "react-router";
+import Footer from "../components/user/Footer";
 
 export default function AuthPage() {
 
@@ -15,7 +16,12 @@ export default function AuthPage() {
 
     return (
         <>
-        <div className="flex items-center justify-center h-screen">
+        <nav className="sticky top-0 bg-white flex items-center justify-between p-4 z-50">
+            <span className="text-xl text-[#E50010] cursor-pointer">
+                <img src="/logo.png" className="w-20" />
+            </span>
+        </nav>
+        <div className="flex items-center justify-center h-[90lvh]">
             <div className="w-1/5">
                 <h3 className="text-4xl font-['Oswald'] uppercase ">{signUp?"Sign up":"Login"}</h3>
                 <div className="flex flex-col gap-y-2 mt-4">
@@ -69,6 +75,7 @@ export default function AuthPage() {
             position="bottom-right"
             reverseOrder={false}
             />
+            <Footer/>
         </>
     )
 }

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router";
 import { LuCircleCheck, LuCircleX, LuLoaderCircle, LuShoppingCart } from "react-icons/lu";
 import PrimaryBtn from "../components/ui/PrimaryBtn";
 import toast, { Toaster } from 'react-hot-toast';
+import Footer from "../components/user/Footer";
 
 export default function CartPage() {
     
@@ -61,9 +62,11 @@ export default function CartPage() {
                                         setCouponLoading(false)
                                     if(data.type=="SUCCESS") {
                                         setDiscount(data.data)
+                                        localStorage.setItem("coupon", coupon)
                                         toast.success("Discount applied.")
                                     } else {
                                         setDiscount(0)
+                                        localStorage.removeItem("coupon")
                                         toast.error(data.msg)
                                     }
                                     

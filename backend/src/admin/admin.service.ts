@@ -8,7 +8,7 @@ export class AdminService {
 
 
     async addProduct(dto:ProductDto, email: string | undefined) {
-        const result = await this.pool.query('INSERT INTO "product" (name, addedby, price, discount, description, images, options) VALUES ($1, $2, $3::numeric, $4::numeric, $5, $6, $7::json)', [dto.name, email, dto.price, dto.discount, dto.description, dto.images, dto?.options]);
+        const result = await this.pool.query('INSERT INTO "product" (name, addedby, price, discount, description, images, options, category) VALUES ($1, $2, $3::numeric, $4::numeric, $5, $6, $7::json, $8)', [dto.name, email, dto.price, dto.discount, dto.description, dto.images, dto?.options, dto.category]);
         
         if(result.type=="SUCCESS" && result.data.rowCount==1) {
             return {type: "SUCCESS", msg: "Successfully added product!"}

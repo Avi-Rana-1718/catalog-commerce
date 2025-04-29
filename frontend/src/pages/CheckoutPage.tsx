@@ -4,16 +4,17 @@ import Nav from "../components/user/Nav";
 import { useNavigate } from "react-router";
 import ItemPreview from "../components/user/ItemPreview";
 import AddressAdd from "../components/user/AddressAdd";
-import { LuMapPinHouse, LuPlus, LuTrash } from "react-icons/lu";
+import { LuLoaderCircle, LuMapPinHouse, LuPlus, LuTrash } from "react-icons/lu";
 import PrimaryBtn from "../components/ui/PrimaryBtn";
 
 import toast, { Toaster } from 'react-hot-toast';
+import Footer from "../components/user/Footer";
 
 export default function CheckoutPage() {
 
     let navigate = useNavigate();
     
-    const [shipping, setShipping] = useState(null);
+    const [shipping, setShipping] = useState(undefined);
     const [addAddress, setAddAddress] = useState(false)
 
     const [data] = useState(JSON.parse(localStorage.getItem("cart")))
@@ -38,7 +39,7 @@ export default function CheckoutPage() {
         }
     }, [addAddress])
 
-    function createOrder() {
+   function createOrder() {
         let cartData = JSON.parse(localStorage.getItem("cart"));
         cartData.forEach(el=>{
             delete el.maxStock;
@@ -51,7 +52,8 @@ export default function CheckoutPage() {
             },
             body: JSON.stringify({
                 items: JSON.stringify(cartData),
-                address: selectedAddress
+                address: selectedAddress,
+                coupon: localStorage.getItem("coupon") || " "
             })
         }).then(res=>res.json()).then(data=>{
             console.log(data);

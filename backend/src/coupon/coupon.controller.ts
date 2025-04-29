@@ -30,4 +30,9 @@ export class CouponController {
     deleteCoupon(@Req() req:nRequest, @Query("code") code:string) {
         return this.couponService.deleteCoupon(req.user?.email, code);
     }
+
+    @Get("redeem")
+    redeemCoupon(@Query("code") code:string) {
+        return this.couponService.redeemCoupon(code)
+    }
 }

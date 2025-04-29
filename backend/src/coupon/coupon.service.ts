@@ -57,5 +57,24 @@ export class CouponService {
         }
     }
 
+    async redeemCoupon(code:string) {
+        const valid = await this.isCouponValid(code);
+        if(valid.type=="ERROR") {
+            return valid;
+        }
+        const result = await this.pool.query(`SELECT * FROM "coupon" WHERE code = $1 AND NOT maxuses = uses LIMIT 1`, [code.toUpperCase()]);
+
+        if(result.type=="SUCCESS" && result.data.rowCount==1) {
+            const increaseUse = await this.pool.query(` UPDATE "coupon" SET uses = uses+1 WHERE CODE = $1`, [code.toUpperCase()]);
+            if(increaseUse.type=="SUCCESS" && increaseUse.data.rowCount==1) {
+                return {type: "SUCCESS", msg: "Successfully redeemed coupon!"}
+            } else {
+                return {type:"ERROR", msg: "Unable to redeem coupon!"}
+            }
+        } else {
+            return {type:"ERROR", msg: "Unable to redeem coupon!"}
+        }
+    }
+
 
 }

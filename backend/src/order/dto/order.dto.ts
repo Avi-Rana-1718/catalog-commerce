@@ -1,8 +1,11 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class OrderDto {
     @IsNotEmpty()
-    items:any
+    items:any;
+
+    @IsString()
+    coupon:string;
 
     @IsNotEmpty()
     address: {

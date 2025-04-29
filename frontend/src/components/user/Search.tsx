@@ -1,6 +1,6 @@
 import { LuSearch, LuX } from "react-icons/lu"
 import Drawer from "../ui/Drawer"
-import { useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { useState } from "react";
 
 export default function Search({setVisible}) {
@@ -25,6 +25,14 @@ export default function Search({setVisible}) {
                 }}/>
                 <LuX className="cursor-pointer" onClick={()=>{setVisible(false)}}/>
             </div>
+
+            <h5 className="mt-10 text-xl font-['Oswald'] tracking-wider uppercase">Popular categories</h5>
+            <ul className="text-lg mt-2">
+                <li><Link to={"/search?name=Men&type=category"} className="hover:underline">Men</Link></li>
+                <li><Link to={"/search?name=Women&type=category"} className="hover:underline">Women</Link></li>
+                <li><Link to={"/search?name=Shirt&type=category"} className="hover:underline">Shirt</Link></li>
+                <li><Link to={"/search?name=Shorts&type=category"} className="hover:underline">Shorts</Link></li>
+            </ul>
         </Drawer>
 
     )

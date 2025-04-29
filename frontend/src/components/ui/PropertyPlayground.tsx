@@ -14,9 +14,6 @@ export default function PropertyPlayground({values, setValues}) {
 
     const [types, setTypes] = useState({size: type.Variation})
 
-    const [name, setName] = useState("") // this is also for a new entry
-    const [key, setKey] = useState("") // for adding a new wntry
-
     useEffect(()=>{
         setKeys(Object.keys(values))
         
@@ -25,7 +22,10 @@ export default function PropertyPlayground({values, setValues}) {
     function addKey(key) {
         let obj = {...values};
         obj[key.toLowerCase()]=[];
-        obj[key.toLowerCase()].push({name: "", stock: 0})
+        obj[key.toLowerCase()].push({name: "", id: 0})
+        let nTypes = {...types};
+        nTypes[key]=type.Relation;
+        setTypes(nTypes)
         setValues(obj)
     }
 
@@ -91,14 +91,28 @@ export default function PropertyPlayground({values, setValues}) {
                                         }
                                         setValues(obj)
                                     }}/>
-                                    X
+                                    <span
+                                        onClick={()=>{
+                                            console.log(values);
+                                            
+                                            let obj = {...values};
+                                            obj[key].filter(value=>(value.name==el.name))
+                                            setValues(obj)
+                                        }}
+                                    >
+                                        X
+                                    </span>
                                 </div>
                             )
                         })}
                         <button 
                             onClick={()=>{
                                 let obj = {...values};
-                                obj[key][values[key].length]={"name": "", stock: 0};
+                                if(types[key]==type.Variation) {
+                                    obj[key][values[key].length]={name: "", stock: 0};
+                                } else {
+                                    obj[key][values[key].length]={name: "", id: 0};
+                                }
                                 setValues(obj)
                             }}
                             className="text-right w-full my-2 hover:underline cursor-pointer">
@@ -109,9 +123,9 @@ export default function PropertyPlayground({values, setValues}) {
                 }))
             }
 
-            <label className="mb-1 mt-5 block">Add new key</label>
+            <label className="mb-1 mx-3 mt-5 block">Add new key</label>
             <input 
-                className="border w-full border-[#dad8d8] focus:border-[#555] px-3 py-2 focus:outline-none block" 
+                className="border w-full border-[#dad8d8] focus:border-[#555] mx-3 px-3 py-2 focus:outline-none block" 
                 placeholder="Key name"
                 value={nKey} 
                 onChange={(e)=>{setNKey(e.target.value)}}  

@@ -1,4 +1,4 @@
-import { LuX } from "react-icons/lu"
+import { LuTrash, LuX } from "react-icons/lu"
 import Drawer from "../ui/Drawer"
 import { useEffect, useState } from "react"
 import Input from "../ui/Input"
@@ -11,6 +11,8 @@ export default function AdminEdit({productID, setVisible, toast}: {productID:num
     const [price, setPrice] = useState(null)
     const [discount, setDiscount] = useState(null)
     const [options, setOptions] = useState(null)
+    const [categories, setCategories] = useState([])
+    const [newCategory, setNewCategory] = useState("")
 
     const [isLoading, setIsLoading] = useState(false)
 
@@ -20,7 +22,11 @@ export default function AdminEdit({productID, setVisible, toast}: {productID:num
            setPrice(data.msg?.price);
            setDiscount(data.msg?.discount);
            setOptions(data?.msg.options);
+           setCategories(data?.msg?.category||[])
            setIsLoading(false)
+
+           console.log("DATA", data);
+           
         })
     }, [isLoading])
 
@@ -39,6 +45,41 @@ export default function AdminEdit({productID, setVisible, toast}: {productID:num
                 <input id="discount" type="number" max="100"  className="border w-full border-[#dad8d8] focus:border-[#555] px-3 py-2 focus:outline-none block" value={discount} onChange={(e)=>{setDiscount(e.target.value)}}/>
                 <label htmlFor="options" className="uppercase mt-2 block">Options</label>
                 {options && <PropertyPlayground values={options} setValues={setOptions} />}
+
+
+                <label htmlFor="categories" className="uppercase block mt-2">Categories</label>
+                <ul className="flex gap-x-2">
+                    {categories && categories.map((el, i)=>(
+                        <li
+                            key={el+i}
+                            className="group bg-[#EAEAEA] px-2 py-1 rounded cursor-pointer hover:underline flex items-center"
+                            onClick={()=>{
+                                let obj = [...categories];
+                                obj=obj.filter((key)=>key!=el);
+                                setCategories(obj)
+                            }}
+                        >
+                            <span>{el}</span>
+                            <LuTrash className="hidden group-hover:inline ml-1 text-red-700"/>
+                        </li>
+                    ))}
+                </ul>
+                <input 
+                    id="categories"
+                    autoComplete="off"
+                    value={newCategory}
+                    onChange={(e)=>{setNewCategory(e.target.value)}}
+                    className="border w-full border-[#dad8d8] focus:border-[#555] mt-1 px-3 py-2 focus:outline-none block"
+                    onKeyDown={(e)=>{
+                        if(e.key=="Enter") {
+                            setCategories([...categories, newCategory])
+                            setNewCategory("")
+                            console.log(categories);
+                            
+                        }
+                    }}    
+                />
+        
             </div>
 
             <PrimaryBtn
@@ -55,7 +96,8 @@ export default function AdminEdit({productID, setVisible, toast}: {productID:num
                             name: name,
                             price: price,
                             discount: discount,
-                            options: options
+                            options: options,
+                            category: categories
                         })
                     }).then(res=>res.json()).then(data=>{
                         console.log(data);

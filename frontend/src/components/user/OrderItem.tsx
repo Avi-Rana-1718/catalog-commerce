@@ -20,7 +20,7 @@ export default function OrderItem({address, orderedAt, orderID, items, status}:O
             <div className="bg-[#F0F2F2] flex justify-between p-3">
                 <h5>
                     Ordered at
-                    <span className="ml-1">{date.getHours()+":"+date.getMinutes() + " - " + date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear()}</span>
+                    <span className="ml-1">{date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear() + " - " + date.getHours()+":"+date.getMinutes()}</span>
                 </h5>
                 <span>
                     OrderID: <small>{orderID}</small>

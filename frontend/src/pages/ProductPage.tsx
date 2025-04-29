@@ -21,6 +21,7 @@ export default function ProductPage() {
             delete obj.size;
             setOptions(obj)
         }
+        setData(null)
         fetch(`http://localhost:3030/product/${params.id}`).then(res=>res.json()).then(data=>{
             console.log(data);
             data.msg.images.splice(0, 1)

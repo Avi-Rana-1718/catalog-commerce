@@ -9,12 +9,12 @@ import AuthPage from './pages/AuthPage';
 import OrdersPage from './pages/OrdersPage';
 import AccountPage from './pages/AccountPage';
 
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminOrders from './pages/admin/AdminOrders';
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminOrders from './pages/admin/Orders';
 
 import './index.css'
 import SearchPage from './pages/SearchPage';
-import AdminCoupons from './pages/admin/AdminCoupons';
+import AdminCoupons from './pages/admin/Coupons';
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>

@@ -14,9 +14,8 @@ export class ProductDto {
     @IsNumber()
     discount: Number;
 
-    // @IsString()
-    // @IsNotEmpty()
-    // categories: any
+    @IsNotEmpty()
+    category: any
 
     @IsArray()
     @IsNotEmpty()

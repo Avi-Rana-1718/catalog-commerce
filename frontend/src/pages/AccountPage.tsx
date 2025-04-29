@@ -3,6 +3,7 @@ import Nav from "../components/user/Nav";
 import { useEffect, useState } from "react";
 import AccountNav from "../components/user/AccountNav";
 import { LuTrash, LuTrash2 } from "react-icons/lu";
+import Footer from "../components/user/Footer";
 
 export default function AccountPage() {
     const navigate = useNavigate();
