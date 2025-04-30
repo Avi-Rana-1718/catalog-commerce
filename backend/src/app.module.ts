@@ -8,7 +8,9 @@ import { AdminModule } from './admin/admin.module';
 import { CouponModule } from './coupon/coupon.module';
 import { AddressModule } from './address/address.module';
 
+import {ConfigModule} from "@nestjs/config"
+
 @Module({
-  imports: [DatabaseModule, AuthModule, UserModule, ProductModule, OrderModule, AdminModule, CouponModule, AddressModule],
+  imports: [DatabaseModule, AuthModule, UserModule, ProductModule, OrderModule, AdminModule, CouponModule, AddressModule, ConfigModule.forRoot({isGlobal: true})],
 })
 export class AppModule {}

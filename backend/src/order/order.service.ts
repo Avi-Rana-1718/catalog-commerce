@@ -37,10 +37,32 @@ export class OrderService {
         
         //reduce stock - # check stock as per size
         let itemsProcessed = 0;
-        JSON.parse(dto.items).forEach(async (el)=>{
-           //reduce
-            itemsProcessed++;
-        })
+        for (const item of JSON.parse(dto.items)) {
+            const res = await this.pool.query( `
+                WITH indexed_sizes AS (
+                  SELECT 
+                    productid,
+                    idx - 1 AS idx
+                  FROM product,
+                  jsonb_array_elements(options -> 'size') WITH ORDINALITY arr(element, idx)
+                  WHERE productid = $2 AND element ->> 'name' = $3
+                )
+                UPDATE product
+                SET options = jsonb_set(
+                  options,
+                  ARRAY['size', indexed_sizes.idx::text, 'stock'],
+                  to_jsonb(((options -> 'size' -> (indexed_sizes.idx::text)) ->> 'stock')::int - $1)
+                )
+                FROM indexed_sizes
+                WHERE product.productid = indexed_sizes.productid
+                  AND ((options -> 'size' -> (indexed_sizes.idx::text)) ->> 'stock')::int >= $1
+                `, [item.quantity, item.id, item.options.size]);
+                console.log([item.quantity, item.id, item.options.size]);
+                
+                
+                itemsProcessed++;
+        }
+        
 
         if(result.type=="SUCCESS" && result.data.rowCount==1) {
             if((await this.couponService.redeemCoupon(dto.coupon)).type=="ERROR") {

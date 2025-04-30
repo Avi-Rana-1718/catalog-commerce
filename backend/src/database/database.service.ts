@@ -1,13 +1,15 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from "@nestjs/common";
-import {Pool, Client} from "pg"
+import { ConfigService } from "@nestjs/config";
+import {Pool} from "pg"
 
 @Injectable()
 export class DatabaseService implements OnModuleInit, OnModuleDestroy{
- private pool:Pool;
+    private pool:Pool
+    constructor(private config:ConfigService) {}
      
     async onModuleInit() {
         this.pool=new Pool({
-           connectionString: "postgresql://neondb_owner:npg_Lqtn8ywmN3Td@ep-young-butterfly-a5vdjjhk-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
+           connectionString: this.config.get("DB_URL")
         });
 
         try {

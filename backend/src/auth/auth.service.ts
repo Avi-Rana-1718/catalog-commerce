@@ -3,12 +3,14 @@ import { DatabaseService } from 'src/database/database.service';
 import { signInDto, signUpDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from "bcrypt"
+import { ConfigService } from '@nestjs/config';
 
 @Injectable({})
 export class AuthService {
   constructor(
     private pool: DatabaseService,
     private jwt: JwtService,
+    private config:ConfigService
   ) {}
 
   async signup(dto: signUpDto) {
@@ -28,8 +30,8 @@ export class AuthService {
 
   async login(dto: signInDto) {
     const result = await this.pool.query(
-      'SELECT email, username, password, is_admin FROM "user" WHERE email = $1',[dto.email]);
-
+      'SELECT email, username, password FROM "user" WHERE email = $1',[dto.email]);
+      
     if(result.type=="SUCCESS" && result.data.rowCount==0) {
       return {type: "ERROR", msg: "User with this email does not exist!"}
     }
@@ -50,8 +52,7 @@ export class AuthService {
 
   signToken(payload: { email: string; username: string }): Promise<string> {
     return this.jwt.signAsync(payload, {
-      // chnage to config
-      secret: 'BOOOM',
+      secret: this.config.get("SECERT")
     });
   }
 }
